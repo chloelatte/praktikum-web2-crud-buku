@@ -1,11 +1,44 @@
 body {
-    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
 }
 
-h1 {
-    color: blue;
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: .3px;
 }
 
-p {
-    font-size: 18px;
+.page-title {
+    font-weight: 600;
+    margin: 0;
+}
+
+.card {
+    border: 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+}
+
+.table thead th {
+    background: #343a40;
+    color: #fff;
+    border: 0;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.col-no   { width: 60px;  text-align: center; }
+.col-aksi { width: 150px; white-space: nowrap; }
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.footer-info {
+    color: #6c757d;
+    font-size: .9rem;
 }
