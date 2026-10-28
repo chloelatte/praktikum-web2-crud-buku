@@ -1,75 +1,170 @@
+
 @extends('layouts.app')
 
 @section('title', 'Data Buku')
 
 @section('content')
 
+    {{-- Header halaman --}}
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div class="mb-3 mb-md-0">
+            <h2 class="font-weight-bold mb-1">Data Buku</h2>
+            <p class="text-muted mb-0">
+                Kelola koleksi buku perpustakaan dengan mudah.
+            </p>
+        </div>
+
+        <a href="{{ route('buku.create') }}" class="btn btn-primary">
+            + Tambah Buku
+        </a>
+    </div>
+
+    {{-- Notifikasi --}}
     @if (Session::has('pesan'))
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ Session::get('pesan') }}
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     @endif
 
-    <div class="card">
-        <div class="card-body">
+    
+{{-- Ringkasan jumlah buku --}}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <img
+                src="{{ asset('images/book-logo.svg') }}"
+                alt="Logo koleksi buku"
+                style="width: 58px; height: 58px; margin-right: 16px;"
+            >
 
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                <h3 class="page-title">Data Buku</h3>
-
-                <div class="d-flex mt-2 mt-md-0">
-                    <form action="{{ route('buku.search') }}" method="get" class="form-inline mr-2">
-                        <input type="text" name="kata" class="form-control" placeholder="Cari judul / penulis ...">
-                        <button class="btn btn-outline-secondary ml-1">Cari</button>
-                    </form>
-                    <a href="{{ route('buku.create') }}" class="btn btn-primary">+ Tambah Buku</a>
-                </div>
+            <div>
+                <p class="text-muted mb-1">Total Koleksi Buku</p>
+                <h3 class="font-weight-bold mb-0">{{ $jumlah_buku }}</h3>
             </div>
+        </div>
+    </div>
+</div>
 
+
+
+    {{-- Tabel data buku --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <h5 class="font-weight-bold mb-2 mb-md-0">Daftar Koleksi</h5>
+
+                <form action="{{ route('buku.search') }}" method="get"
+                      class="form-inline">
+                    <input
+                        type="text"
+                        name="kata"
+                        class="form-control mr-2 mb-2 mb-sm-0"
+                        placeholder="Cari judul atau penulis..."
+                        value="{{ request('kata') }}"
+                        aria-label="Cari judul atau penulis"
+                    >
+                    <button type="submit" class="btn btn-outline-primary">
+                        Cari
+                    </button>
+
+                    @if (request()->filled('kata'))
+                        <a href="{{ route('buku.index') }}"
+                           class="btn btn-link">
+                            Reset
+                        </a>
+                    @endif
+                </form>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-hover mb-0">
+                    <thead class="thead-light">
                         <tr>
-                            <th class="col-no">No</th>
-                            <th>Judul</th>
+                            <th class="text-center" style="width: 65px;">No.</th>
+                            <th>Judul Buku</th>
                             <th>Penulis</th>
                             <th class="text-right">Harga</th>
-                            <th class="text-center">Tgl. Terbit</th>
-                            <th class="col-aksi text-center">Aksi</th>
+                            <th class="text-center">Tanggal Terbit</th>
+                            <th class="text-center" style="min-width: 145px;">Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @forelse ($data_buku as $buku)
                             <tr>
-                                <td class="col-no">{{ ++$no }}</td>
-                                <td>{{ $buku->judul }}</td>
-                                <td>{{ $buku->penulis }}</td>
-                                <td class="text-right">Rp {{ number_format($buku->harga, 0, ',', '.') }}</td>
-                                <td class="text-center">{{ $buku->tgl_terbit->format('d/m/Y') }}</td>
-                                <td class="col-aksi text-center">
-                                    <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('buku.destroy', $buku->id) }}" method="post" class="d-inline"
-                                          onsubmit="return confirm('Yakin hapus data ini?')">
+                                <td class="text-center align-middle">
+                                    {{ ++$no }}
+                                </td>
+
+                                <td class="align-middle font-weight-bold">
+                                    {{ $buku->judul }}
+                                </td>
+
+                                <td class="align-middle">
+                                    {{ $buku->penulis }}
+                                </td>
+
+                                <td class="text-right align-middle text-nowrap">
+                                    Rp {{ number_format($buku->harga, 0, ',', '.') }}
+                                </td>
+
+                                <td class="text-center align-middle text-nowrap">
+                                    {{ $buku->tgl_terbit->format('d/m/Y') }}
+                                </td>
+
+                                <td class="text-center align-middle text-nowrap">
+                                    <a href="{{ route('buku.edit', $buku->id) }}"
+                                       class="btn btn-sm btn-warning">
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        action="{{ route('buku.destroy', $buku->id) }}"
+                                        method="post"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Yakin hapus data ini?')"
+                                    >
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">Hapus</button>
+
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            Hapus
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">Belum ada data buku.</td>
+                                <td colspan="6" class="text-center text-muted py-5">
+                                    <h6 class="font-weight-bold">Belum ada data buku</h6>
+                                    <p class="mb-0">
+                                        Tambahkan buku baru untuk mengisi koleksi perpustakaan.
+                                    </p>
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
-                <span class="footer-info">Jumlah Buku: <strong>{{ $jumlah_buku }}</strong></span>
-                {{ $data_buku->links() }}
+        {{-- Footer tabel dan pagination --}}
+        <div class="card-footer bg-white">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <small class="text-muted mb-2 mb-md-0">
+                    Menampilkan {{ $data_buku->count() }} data pada halaman ini
+                    dari {{ $jumlah_buku }} buku.
+                </small>
+
+                <div>
+                    {{ $data_buku->links() }}
+                </div>
             </div>
-
         </div>
     </div>
 

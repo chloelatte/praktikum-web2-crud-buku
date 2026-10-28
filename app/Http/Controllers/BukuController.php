@@ -81,7 +81,7 @@ class BukuController extends Controller
             ],
             'penulis' => [
                 'bail', 'required', 'string', 'min:3', 'max:30',
-                'regex:/^\pL[\pL\s.,\'-]*$/u',
+                'regex:/^[\pL\pN][\pL\pN\s.,\'-]*$/u',
             ],
             'harga' => [
                 'bail', 'required', 'integer', 'min:1000', 'max:100000000',
