@@ -1,1 +1,1 @@
-alert("Selamat datang di halaman About!");
+// alert("Selamat datang di halaman About!");

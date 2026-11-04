@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+
 
 // Login hanya untuk pengguna yang belum login
 Route::middleware('guest')->group(function () {
@@ -51,4 +53,6 @@ Route::middleware('auth')->group(function () {
         ->name('buku.destroy');
 
     Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
+
+    Route::resource('/users', UserController::class)->middleware('admin');
 });

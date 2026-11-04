@@ -101,6 +101,14 @@
                     <span>Post</span>
                 </a>
             </li>
+            @if(auth()->check() && auth()->user()->level == 'admin')
+                <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('users.index') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Data Users</span>
+                    </a>
+                </li>
+            @endif
 
             <hr class="sidebar-divider d-none d-md-block">
 
