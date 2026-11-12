@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Data Buku')
@@ -29,26 +28,23 @@
         </div>
     @endif
 
-    
-{{-- Ringkasan jumlah buku --}}
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-        <div class="d-flex align-items-center">
-            <img
-                src="{{ asset('images/book-logo.svg') }}"
-                alt="Logo koleksi buku"
-                style="width: 58px; height: 58px; margin-right: 16px;"
-            >
+    {{-- Ringkasan jumlah buku --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <img
+                    src="{{ asset('images/book-logo.svg') }}"
+                    alt="Logo koleksi buku"
+                    style="width: 58px; height: 58px; margin-right: 16px;"
+                >
 
-            <div>
-                <p class="text-muted mb-1">Total Koleksi Buku</p>
-                <h3 class="font-weight-bold mb-0">{{ $jumlah_buku }}</h3>
+                <div>
+                    <p class="text-muted mb-1">Total Koleksi Buku</p>
+                    <h3 class="font-weight-bold mb-0">{{ $jumlah_buku }}</h3>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
 
     {{-- Tabel data buku --}}
     <div class="card border-0 shadow-sm">
@@ -66,6 +62,7 @@
                         value="{{ request('kata') }}"
                         aria-label="Cari judul atau penulis"
                     >
+
                     <button type="submit" class="btn btn-outline-primary">
                         Cari
                     </button>
@@ -86,6 +83,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" style="width: 65px;">No.</th>
+                            <th class="text-center">Cover</th>
                             <th>Judul Buku</th>
                             <th>Penulis</th>
                             <th class="text-right">Harga</th>
@@ -99,6 +97,22 @@
                             <tr>
                                 <td class="text-center align-middle">
                                     {{ ++$no }}
+                                </td>
+
+                                {{-- Cover Buku --}}
+                                <td class="text-center align-middle">
+                                    @if ($buku->cover)
+                                        <img
+                                            src="{{ asset('storage/' . $buku->cover) }}"
+                                            alt="Cover {{ $buku->judul }}"
+                                            style="width: 55px; height: 75px; object-fit: cover;"
+                                            class="img-thumbnail"
+                                        >
+                                    @else
+                                        <span class="text-muted small">
+                                            Tidak ada cover
+                                        </span>
+                                    @endif
                                 </td>
 
                                 <td class="align-middle font-weight-bold">
@@ -140,7 +154,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-5">
+                                <td colspan="7" class="text-center text-muted py-5">
                                     <h6 class="font-weight-bold">Belum ada data buku</h6>
                                     <p class="mb-0">
                                         Tambahkan buku baru untuk mengisi koleksi perpustakaan.

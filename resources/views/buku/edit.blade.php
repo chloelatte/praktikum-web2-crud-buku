@@ -54,7 +54,8 @@
                     @endif
 
                     <form action="{{ route('buku.update', $buku->id) }}"
-                          method="POST">
+                          method="POST"
+                          enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -167,6 +168,51 @@
 
                             @error('tgl_terbit')
                                 <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <!-- Cover Buku -->
+                        <div class="form-group">
+                            <label for="cover" class="font-weight-bold">
+                                Cover Buku
+                            </label>
+
+                            @if ($buku->cover)
+                                <div class="mb-3">
+                                    <p class="text-muted small mb-2">
+                                        Cover saat ini:
+                                    </p>
+
+                                    <img
+                                        src="{{ asset('storage/' . $buku->cover) }}"
+                                        alt="Cover {{ $buku->judul }}"
+                                        style="width: 130px; height: 180px; object-fit: cover;"
+                                        class="img-thumbnail"
+                                    >
+                                </div>
+                            @else
+                                <p class="text-muted small">
+                                    Buku ini belum memiliki cover.
+                                </p>
+                            @endif
+
+                            <input
+                                type="file"
+                                id="cover"
+                                name="cover"
+                                accept=".jpg,.jpeg,.png"
+                                class="form-control-file @error('cover') is-invalid @enderror"
+                            >
+
+                            <small class="form-text text-muted">
+                                Kosongkan jika tidak ingin mengganti cover.
+                                Format JPG, JPEG, atau PNG. Maksimal 2 MB.
+                            </small>
+
+                            @error('cover')
+                                <div class="text-danger small mt-1">
                                     {{ $message }}
                                 </div>
                             @enderror

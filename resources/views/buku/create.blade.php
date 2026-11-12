@@ -53,7 +53,9 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('buku.store') }}" method="POST">
+                    <form action="{{ route('buku.store') }}"
+                          method="POST"
+                          enctype="multipart/form-data">
                         @csrf
 
                         <!-- Judul Buku -->
@@ -165,6 +167,32 @@
 
                             @error('tgl_terbit')
                                 <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <!-- Cover Buku -->
+                        <div class="form-group">
+                            <label for="cover" class="font-weight-bold">
+                                Cover Buku
+                            </label>
+
+                            <input
+                                type="file"
+                                id="cover"
+                                name="cover"
+                                accept=".jpg,.jpeg,.png"
+                                class="form-control-file @error('cover') is-invalid @enderror"
+                            >
+
+                            <small class="form-text text-muted">
+                                Format yang diperbolehkan: JPG, JPEG, dan PNG.
+                                Maksimal ukuran file 2 MB.
+                            </small>
+
+                            @error('cover')
+                                <div class="text-danger small mt-1">
                                     {{ $message }}
                                 </div>
                             @enderror

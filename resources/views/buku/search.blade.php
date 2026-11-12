@@ -93,6 +93,7 @@
                             <th class="text-center" style="width: 65px;">
                                 No.
                             </th>
+                            <th class="text-center">Cover</th>
                             <th>Judul Buku</th>
                             <th>Penulis</th>
                             <th class="text-right">Harga</th>
@@ -108,6 +109,22 @@
                             <tr>
                                 <td class="text-center align-middle">
                                     {{ ++$no }}
+                                </td>
+
+                                {{-- Cover Buku --}}
+                                <td class="text-center align-middle">
+                                    @if ($buku->cover)
+                                        <img
+                                            src="{{ asset('storage/' . $buku->cover) }}"
+                                            alt="Cover {{ $buku->judul }}"
+                                            style="width: 55px; height: 75px; object-fit: cover;"
+                                            class="img-thumbnail"
+                                        >
+                                    @else
+                                        <span class="text-muted small">
+                                            Tidak ada cover
+                                        </span>
+                                    @endif
                                 </td>
 
                                 <td class="align-middle font-weight-bold">
