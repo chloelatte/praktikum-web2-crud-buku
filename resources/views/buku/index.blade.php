@@ -88,7 +88,7 @@
                             <th>Penulis</th>
                             <th class="text-right">Harga</th>
                             <th class="text-center">Tanggal Terbit</th>
-                            <th class="text-center" style="min-width: 145px;">Aksi</th>
+                            <th class="text-center" style="min-width: 230px;">Aksi</th>
                         </tr>
                     </thead>
 
@@ -131,12 +131,27 @@
                                     {{ $buku->tgl_terbit->format('d/m/Y') }}
                                 </td>
 
+                                {{-- Tombol Aksi --}}
                                 <td class="text-center align-middle text-nowrap">
-                                    <a href="{{ route('buku.edit', $buku->id) }}"
-                                       class="btn btn-sm btn-warning">
+
+                                    {{-- Detail Buku --}}
+                                    <a
+                                        href="{{ route('galeri.buku', $buku->buku_seo) }}"
+                                        class="btn btn-sm btn-info"
+                                    >
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Detail
+                                    </a>
+
+                                    {{-- Edit Buku --}}
+                                    <a
+                                        href="{{ route('buku.edit', $buku->id) }}"
+                                        class="btn btn-sm btn-warning"
+                                    >
                                         Edit
                                     </a>
 
+                                    {{-- Hapus Buku --}}
                                     <form
                                         action="{{ route('buku.destroy', $buku->id) }}"
                                         method="post"
@@ -150,6 +165,7 @@
                                             Hapus
                                         </button>
                                     </form>
+
                                 </td>
                             </tr>
                         @empty

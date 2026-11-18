@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BukuController extends Controller
 {
@@ -61,6 +61,9 @@ class BukuController extends Controller
     {
         $validated = $this->validasi($request);
 
+        // Membuat slug unik berdasarkan judul
+        $validated['buku_seo'] = $this->buatSlugUnik($validated['judul']);
+
         // Memeriksa apakah pengguna mengunggah cover
         if ($request->hasFile('cover')) {
 
@@ -108,6 +111,12 @@ class BukuController extends Controller
     public function update(Request $request, Buku $buku)
     {
         $validated = $this->validasi($request, $buku);
+
+        // Membuat slug unik berdasarkan judul
+        $validated['buku_seo'] = $this->buatSlugUnik(
+            $validated['judul'],
+            $buku
+        );
 
         // Memeriksa apakah pengguna mengunggah cover baru
         if ($request->hasFile('cover')) {
@@ -186,7 +195,6 @@ class BukuController extends Controller
                 'string',
                 'min:3',
                 'max:100',
-                Rule::unique('books', 'judul')->ignore($buku?->id),
             ],
 
             'penulis' => [
@@ -195,7 +203,7 @@ class BukuController extends Controller
                 'string',
                 'min:3',
                 'max:30',
-                'regex:/^[\pL\pN][\pL\pN\s.,\\\'-]*$/u',
+                "regex:/^[\\pL\\pN][\\pL\\pN\\s.,\\\\'-]*$/u",
             ],
 
             'harga' => [
@@ -222,5 +230,33 @@ class BukuController extends Controller
                 'max:2048',
             ],
         ]);
+    }
+
+    // Membuat slug unik berdasarkan judul buku
+    private function buatSlugUnik(string $judul, ?Buku $buku = null): string
+    {
+        $slugDasar = Str::slug($judul);
+
+        // Menggunakan slug cadangan jika hasil slug kosong
+        if ($slugDasar === '') {
+            $slugDasar = 'buku';
+        }
+
+        $slug = $slugDasar;
+        $nomor = 2;
+
+        // Memeriksa apakah slug sudah digunakan buku lain
+        while (
+            Buku::where('buku_seo', $slug)
+                ->when($buku, function ($query) use ($buku) {
+                    $query->where('id', '!=', $buku->id);
+                })
+                ->exists()
+        ) {
+            $slug = $slugDasar . '-' . $nomor;
+            $nomor++;
+        }
+
+        return $slug;
     }
 }

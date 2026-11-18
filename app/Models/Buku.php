@@ -13,12 +13,17 @@ class Buku extends Model
         'penulis',
         'harga',
         'tgl_terbit',
-        'cover'
+        'cover',
+        'buku_seo'
     ];
     protected function casts(): array
     {
         return [
             'tgl_terbit' => 'date',
         ];
+    }
+
+    public function galeris(){
+        return $this->hasMany(Galeri::class, 'id_buku', 'id');
     }
 }

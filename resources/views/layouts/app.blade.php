@@ -13,9 +13,13 @@
     <link rel="stylesheet"
           href="{{ asset('startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.min.css') }}">
 
-    <!-- Datepicker yang sudah digunakan proyek -->
+    <!-- Datepicker -->
     <link rel="stylesheet"
           href="{{ asset('css/bootstrap-datepicker.min.css') }}">
+
+    <!-- Lightbox2 CSS -->
+    <link rel="stylesheet"
+          href="{{ asset('dist/css/lightbox.min.css') }}">
 
     <style>
         .sidebar-brand-icon img {
@@ -101,6 +105,7 @@
                     <span>Post</span>
                 </a>
             </li>
+
             @if(auth()->check() && auth()->user()->level == 'admin')
                 <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('users.index') }}">
@@ -146,6 +151,7 @@
                         @auth
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-link d-flex align-items-center">
+
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                         Halo, {{ auth()->user()->name }}
                                     </span>
@@ -162,6 +168,7 @@
                                             Logout
                                         </button>
                                     </form>
+
                                 </div>
                             </li>
                         @endauth
@@ -204,6 +211,9 @@
     <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Lightbox2 JavaScript -->
+    <script src="{{ asset('dist/js/lightbox.min.js') }}"></script>
 
     <!-- Datepicker -->
     <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
@@ -260,6 +270,7 @@
         });
     </script>
 
+    <!-- Custom JavaScript -->
     <script src="{{ asset('js/script.js') }}"></script>
 
     @stack('scripts')

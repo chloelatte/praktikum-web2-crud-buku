@@ -7,6 +7,7 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GaleriController;
 
 
 // Login hanya untuk pengguna yang belum login
@@ -55,4 +56,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
 
     Route::resource('/users', UserController::class)->middleware('admin');
+
+    Route::get('/detail-buku/{buku_seo}', [GaleriController::class, 'show'])->name('galeri.buku');
+    Route::post('/detail-buku/{buku_seo}/galeri', [GaleriController::class, 'store'])->name('galeri.store');
+
+    Route::get('/galeri/{galeri}/edit', [GaleriController::class, 'edit'])
+        ->name('galeri.edit');
+
+    Route::put('/galeri/{galeri}', [GaleriController::class, 'update'])
+        ->name('galeri.update');
+
+    Route::delete('/galeri/{galeri}', [GaleriController::class, 'destroy'])->name('galeri.destroy');
 });
