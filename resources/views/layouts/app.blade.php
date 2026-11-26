@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title', 'Perpustakaan')</title>
+    @auth
+        <meta name="auth-user-id" content="{{ auth()->id() }}">
+    @endauth
+    @vite('resources/js/app.js')
 
     <!-- SB Admin 2 -->
     <link rel="stylesheet"
@@ -48,6 +52,59 @@
         .page-heading {
             color: #4e73df;
             font-weight: 700;
+        }
+
+        /* Toast Notification */
+        /* Wadah seluruh notifikasi */
+        #notification-toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            width: 320px;
+        }
+
+        /* Tampilan setiap notifikasi */
+        .notification-toast {
+            position: relative;
+            width: 100%;
+            padding: 16px 20px;
+
+            background: #ffffff;
+            border-left: 5px solid #1cc88a;
+            border-radius: 8px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+            animation: toastMasuk 0.4s ease;
+        }
+
+        .notification-toast h6 {
+            font-weight: 700;
+            color: #1cc88a;
+            margin-bottom: 8px;
+        }
+
+        .notification-toast p {
+            margin-bottom: 4px;
+            color: #5a5c69;
+        }
+
+        @keyframes toastMasuk {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 
@@ -273,6 +330,7 @@
     <!-- Custom JavaScript -->
     <script src="{{ asset('js/script.js') }}"></script>
 
+    <div id="notification-toast-container"></div>
     @stack('scripts')
 
 </body>

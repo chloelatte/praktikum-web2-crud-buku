@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login | Perpustakaan</title>
+    @vite('resources/js/app.js')
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
@@ -54,6 +54,19 @@
             padding: 12px;
             border-radius: 10px;
             font-weight: 600;
+        }
+
+        .btn-google {
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: 1px solid #ced4da;
+            background: #fff;
+            color: #333;
+        }
+
+        .btn-google:hover {
+            background: #f8f9fa;
         }
     </style>
 </head>
@@ -119,6 +132,24 @@
                 Login
             </button>
         </form>
+
+        <div class="d-flex align-items-center my-4">
+            <hr class="flex-grow-1">
+            <span class="px-3 text-secondary small">ATAU</span>
+            <hr class="flex-grow-1">
+        </div>
+
+        <a href="{{ route('auth.google.redirect') }}"
+           class="btn btn-google w-100">
+            <img
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google"
+                width="20"
+                height="20"
+                class="me-2"
+            >
+            Login dengan Google
+        </a>
     </main>
 </body>
 </html>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -75,6 +76,48 @@ class AuthController extends Controller
 
         return redirect()->route('buku.index');
     }
+
+    public function redirectToGoogle(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback(Request $request){
+        $googleUser = Socialite::driver('google')->user();
+        $email = $googleUser->getEmail();
+
+        if (!$email || !($googleUser->user['email_verified'] ?? false)) {
+            return redirect()->route('login')->withErrors(['email' => 'Email Google tidak tersedia atau belum diverifikasi.',]);
+        }
+
+        $user = User::where('google_id', $googleUser->getId())->first();
+        if (!$user){
+            $user = User::where('email', $email)->first();
+
+            if ($user){
+                if ($user->google_id && $user->google_id !== $googleUser->getId()) {
+                    return redirect()->route('login')->withErrors(['email' => 'Akun Google tidak dapat dihubungkan dengan akun ini.',]);
+                }
+                $user->google_id = $googleUser->getId();
+                $user->avatar = $googleUser->getAvatar();
+                $user->email_verified_at ??=now();
+                $user->save();
+            } else {
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                    'level' => 'user',
+                    'email_verified_at' => now(),
+                ]);
+            }
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect()->intended(route('buku.index'));
+    }
+
 
     public function logout(Request $request)
     {
